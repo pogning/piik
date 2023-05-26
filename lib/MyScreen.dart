@@ -18,9 +18,12 @@ class MyScreen extends ConsumerStatefulWidget {
 }
 
 class _MyScreenState extends ConsumerState<MyScreen> {
+  bool follow = false;
+  bool channelPost = false;
   @override
   Widget build(BuildContext context) {
     final test = ref.watch(typeProvider);
+
     return Container(
       width: MediaQuery.of(context).size.width - 200,
       height: MediaQuery.of(context).size.height - 60,
@@ -74,21 +77,29 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                             ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.grey.shade800,
-                                ),
+                                    MaterialStateProperty.all<Color>(follow
+                                        ? Colors.limeAccent.shade700
+                                        : Colors.grey.shade800),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  follow = !follow;
+                                });
+                              },
                               child: const Text("Follow"),
                             ),
                             ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.grey.shade800,
-                                ),
+                                    MaterialStateProperty.all<Color>(channelPost
+                                        ? Colors.limeAccent.shade700
+                                        : Colors.grey.shade800),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  channelPost = !channelPost;
+                                });
+                              },
                               child: Text("Channel Post"),
                             ),
                           ],
@@ -184,8 +195,31 @@ class _MyScreenState extends ConsumerState<MyScreen> {
           ),
           Container(
             width: 300,
+            alignment: Alignment.topCenter,
             color: Colors.black,
-          )
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                channelPost && follow
+                    ? Container(
+                        height: 50,
+                        width: 200,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.grey.shade800,
+                            ),
+                          ),
+                          onPressed: () {},
+                          child: const Text("Add Post"),
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
         ],
       ),
     );
